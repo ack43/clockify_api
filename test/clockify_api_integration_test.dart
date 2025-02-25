@@ -88,5 +88,26 @@ void main() {
             reason: 'User ID does not match the expected value.');
       }
     });
+
+    test('current method returns a successful response', () async {
+      final response = await clockifyApi.serviceUsers.current();
+      expect(response.isSuccessful, true,
+          reason: 'The response should be successful.');
+      expect(response.body, isNotNull,
+          reason: 'The response body should not be null.');
+      print('Successfully fetched current user: ${response.body?.name}');
+    });
+
+    test('current method returns valid user data', () async {
+      final response = await clockifyApi.serviceUsers.current();
+      expect(response.body, isNotNull,
+          reason: 'The response body should not be null.');
+      final user = response.body;
+      if (user != null) {
+        expect(user.id, isNotEmpty, reason: 'User ID should not be empty.');
+        expect(user.name, isNotEmpty, reason: 'User name should not be empty.');
+        print('Fetched current user: ${user.name}');
+      }
+    });
   });
 }
