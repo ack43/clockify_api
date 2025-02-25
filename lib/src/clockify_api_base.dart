@@ -52,32 +52,8 @@ class ClockifyApi {
   ClockifyApiWorkspacesService get serviceWorkspaces =>
       _service<ClockifyApiWorkspacesService>();
 
-  ClockifyApiUsersService get userService =>
+  ClockifyApiUsersService get serviceUsers =>
       _service<ClockifyApiUsersService>();
-
-  // ////
-  // ////
-  // ////
-  // ////
-  // ////
-  // Map? _baseMapResponseParser(Response response) =>
-  //     response.isSuccessful ? response.body : {};
-  // Object? _baseObjectResponseParser(Response response) =>
-  //     response.isSuccessful ? response.body : null;
-  // List _baseListResponseParser(Response response) =>
-  //     response.isSuccessful ? response.body : [];
-  // ////
-  // ////
-  // ////
-  // ////
-  // ////
-  // Future<List<Workspace>> getWorkspaces() async => serviceWorkspaces
-  //     .getWorkspaces()
-  //     .then((response) => response.isSuccessful ? response.body ?? [] : []);
-  // // .then(_baseListResponseParser);
-  // Future<Workspace?> getWorkspace(String id) => serviceWorkspaces
-  //     .getWorkspace(id)
-  //     .then((response) => response.isSuccessful ? response.body : null);
 }
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
