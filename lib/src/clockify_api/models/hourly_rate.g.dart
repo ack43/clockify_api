@@ -7,8 +7,8 @@ part of 'hourly_rate.dart';
 // **************************************************************************
 
 HourlyRate _$HourlyRateFromJson(Map<String, dynamic> json) => HourlyRate(
-      amount: json['amount'] as num,
-      currency: json['currency'] as String,
+      amount: json['amount'] as num?,
+      currency: json['currency'] as String?,
     );
 
 Map<String, dynamic> _$HourlyRateToJson(HourlyRate instance) =>

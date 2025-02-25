@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+import 'base.dart';
 import 'package:dotenv/dotenv.dart' as dotenv;
 import 'package:clockify_api/clockify_api.dart';
 
@@ -32,7 +33,8 @@ void main() {
   }
 
   // Create an instance of ClockifyApi using the API key.
-  final clockifyApi = ClockifyApi(apiKey: apiKey);
+  final clockifyApi =
+      ClockifyApi(apiKey: apiKey, interceptors: [ResponseLoggingInterceptor()]);
 
   group('ClockifyApi Integration Tests', () {
     test('getWorkspacesSafe returns a non-empty list of workspaces', () async {

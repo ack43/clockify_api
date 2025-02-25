@@ -7,8 +7,8 @@ part of 'cost_rate.dart';
 // **************************************************************************
 
 CostRate _$CostRateFromJson(Map<String, dynamic> json) => CostRate(
-      amount: json['amount'] as num,
-      currency: json['currency'] as String,
+      amount: json['amount'] as num?,
+      currency: json['currency'] as String?,
     );
 
 Map<String, dynamic> _$CostRateToJson(CostRate instance) => <String, dynamic>{

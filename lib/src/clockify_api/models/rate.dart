@@ -4,8 +4,8 @@ part 'rate.g.dart';
 
 @JsonSerializable()
 class Rate {
-  final num amount;
-  final String currency;
+  final num? amount;
+  final String? currency;
 
   Rate({required this.amount, required this.currency});
 

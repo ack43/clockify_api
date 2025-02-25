@@ -1,61 +1,71 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'cost_rate.dart';
+import 'membership.dart';
 
 part 'project.g.dart';
 
 @JsonSerializable()
 class Project {
-  final bool archived;
-  final bool billable;
-  final BudgetEstimate budgetEstimate;
-  final String clientId;
-  final String clientName;
-  final String color;
-  final CostRate costRate;
-  final String duration;
-  final Estimate estimate;
-  final EstimateReset estimateReset;
-  final CostRate hourlyRate;
   final String id;
-  final List<Membership> memberships;
-  final String name;
-  final String note;
-  final bool isPublic;
-  final bool template;
-  final TimeEstimate timeEstimate;
-  final String workspaceId;
+  final String? name;
+  final CostRate? hourlyRate;
+  final String? clientId;
+  final String? workspaceId;
+  final bool? billable;
+  final List<Membership>? memberships;
+  final String? color;
+  final Estimate? estimate;
+  final bool? archived;
+  final String? duration;
+  final String? clientName;
+  final String? note;
+  final CostRate? costRate;
+  final TimeEstimate? timeEstimate;
+  final Estimate? budgetEstimate;
+  final EstimateReset? estimateReset;
+  final bool? template;
+  final bool? isPublic;
 
   Project({
-    required this.archived,
-    required this.billable,
-    required this.budgetEstimate,
-    required this.clientId,
-    required this.clientName,
-    required this.color,
-    required this.costRate,
-    required this.duration,
-    required this.estimate,
-    required this.estimateReset,
-    required this.hourlyRate,
     required this.id,
-    required this.memberships,
     required this.name,
-    required this.note,
-    required this.isPublic,
-    required this.template,
-    required this.timeEstimate,
+    required this.hourlyRate,
+    required this.clientId,
     required this.workspaceId,
+    required this.billable,
+    required this.memberships,
+    required this.color,
+    required this.estimate,
+    required this.archived,
+    required this.duration,
+    this.clientName,
+    this.note,
+    this.costRate,
+    required this.timeEstimate,
+    this.budgetEstimate,
+    this.estimateReset,
+    required this.template,
+    required this.isPublic,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) =>
       _$ProjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProjectToJson(this);
+
+  static List<Project> fromJsonList(List<dynamic> jsonList) {
+    return jsonList
+        .map((json) => Project.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
 }
+
+// Other classes (BudgetEstimate, Estimate, Membership, etc.) remain the same as before.
 
 @JsonSerializable()
 class BudgetEstimate {
   final bool active;
-  final int estimate;
+  final String estimate;
   final bool includeExpenses;
   final String resetOption;
   final String type;
@@ -76,8 +86,8 @@ class BudgetEstimate {
 
 @JsonSerializable()
 class Estimate {
-  final String estimate;
-  final String type;
+  final String? estimate;
+  final String? type;
 
   Estimate({
     required this.estimate,
@@ -92,18 +102,18 @@ class Estimate {
 
 @JsonSerializable()
 class EstimateReset {
-  final int dayOfMonth;
-  final String dayOfWeek;
-  final int hour;
-  final String interval;
-  final String month;
+  final int? dayOfMonth;
+  final String? dayOfWeek;
+  final int? hour;
+  final String? interval;
+  final String? month;
 
   EstimateReset({
-    required this.dayOfMonth,
-    required this.dayOfWeek,
-    required this.hour,
-    required this.interval,
-    required this.month,
+    this.dayOfMonth,
+    this.dayOfWeek,
+    this.hour,
+    this.interval,
+    this.month,
   });
 
   factory EstimateReset.fromJson(Map<String, dynamic> json) =>
@@ -114,11 +124,11 @@ class EstimateReset {
 
 @JsonSerializable()
 class TimeEstimate {
-  final bool active;
-  final String estimate;
-  final bool includeNonBillable;
-  final String resetOption;
-  final String type;
+  final bool? active;
+  final String? estimate;
+  final bool? includeNonBillable;
+  final String? resetOption;
+  final String? type;
 
   TimeEstimate({
     required this.active,
@@ -132,31 +142,4 @@ class TimeEstimate {
       _$TimeEstimateFromJson(json);
 
   Map<String, dynamic> toJson() => _$TimeEstimateToJson(this);
-}
-
-@JsonSerializable()
-class Membership {
-  // Add fields here as needed, based on your JSON
-  Membership();
-
-  factory Membership.fromJson(Map<String, dynamic> json) =>
-      _$MembershipFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MembershipToJson(this);
-}
-
-@JsonSerializable()
-class CostRate {
-  final int amount;
-  final String currency;
-
-  CostRate({
-    required this.amount,
-    required this.currency,
-  });
-
-  factory CostRate.fromJson(Map<String, dynamic> json) =>
-      _$CostRateFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CostRateToJson(this);
 }

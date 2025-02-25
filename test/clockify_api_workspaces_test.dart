@@ -171,9 +171,6 @@ class FakeHttpClient extends http.BaseClient {
       statusCode = 404;
     }
 
-    print('request.url.path - ${request.url.path}');
-    print('body - $body');
-
     final stream = Stream.value(utf8.encode(body));
     return http.StreamedResponse(stream, statusCode,
         headers: {'Content-Type': 'application/json'});
@@ -189,7 +186,7 @@ class _JsonTypeConverter extends JsonConverter {
   @override
   FutureOr<Response<BodyType>> convertResponse<BodyType, InnerType>(
       Response response) {
-    print('response.bodyString - ${response.bodyString}');
+    // print('response.bodyString - ${response.bodyString}');
     final dynamic decoded = json.decode(response.bodyString);
     final fromJson = _factories[InnerType];
 

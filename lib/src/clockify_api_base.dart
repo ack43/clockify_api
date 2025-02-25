@@ -17,10 +17,14 @@ class ClockifyApi {
 
   final ChopperClient chopper;
 
+  ClockifyApi.chopper(this.chopper)
+      : _apiKey = null,
+        _marketplaceKey = null;
   ClockifyApi({
     String? apiKey,
     String? marketplaceKey,
     String? url,
+    List<Interceptor> interceptors = const [],
   })  : _apiKey = apiKey,
         _marketplaceKey = marketplaceKey,
         chopper = ChopperClient(
@@ -34,13 +38,15 @@ class ClockifyApi {
           converter: _JsonTypeConverter({
             User: (json) => User.fromJson(json),
             Workspace: (json) => Workspace.fromJson(json),
+            Client: (json) => Client.fromJson(json),
+            Project: (json) => Project.fromJson(json),
           }),
-          interceptors: [
-            if (apiKey != null) HeadersInterceptor({apiKeyHeader: apiKey}),
-            if (marketplaceKey != null)
-              HeadersInterceptor({marketplaceKeyHeader: marketplaceKey}),
-            // LoggingInterceptor(), etc.
-          ],
+          interceptors: interceptors +
+              [
+                if (apiKey != null) HeadersInterceptor({apiKeyHeader: apiKey}),
+                if (marketplaceKey != null)
+                  HeadersInterceptor({marketplaceKeyHeader: marketplaceKey}),
+              ],
         );
 
   ///
@@ -67,6 +73,11 @@ class _JsonTypeConverter extends JsonConverter {
   FutureOr<Response<BodyType>> convertResponse<BodyType, InnerType>(
       Response response) {
     final jsonMap = json.decode(response.bodyString);
+    print('jsonMap - ${jsonMap.toString()}');
+    print('');
+    print('');
+    print('');
+    print('');
 
     if (jsonMap is Map<String, dynamic>) {
       final fromJson = _factories[InnerType];

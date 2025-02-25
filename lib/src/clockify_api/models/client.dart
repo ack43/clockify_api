@@ -5,14 +5,14 @@ part 'client.g.dart';
 @JsonSerializable()
 class Client {
   final String id;
-  final String name;
-  final String address;
-  final bool archived;
+  final String? name;
+  final String? address;
+  final bool? archived;
   final String? currencyCode;
-  final String currencyId;
-  final String email;
-  final String note;
-  final String workspaceId;
+  final String? currencyId;
+  final String? email;
+  final String? note;
+  final String? workspaceId;
 
   Client({
     required this.id,

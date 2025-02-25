@@ -51,4 +51,86 @@ final class _$ClockifyApiWorkspacesService
     );
     return client.send<List<User>, User>($request);
   }
+
+  @override
+  Future<Response<List<Project>>> getWorkspaceProjects(
+    String workspaceId, {
+    String? name,
+    bool? strictNameSearch,
+    String? archived,
+    String? billable,
+    List<String>? clients,
+    String? containsClient,
+    String? clientStatus,
+    List<String>? users,
+    String? containsUser,
+    String? userStatus,
+    String? isTemplate,
+    String? sortColumn,
+    String? sortOrder,
+    String? hydrated,
+    String? page,
+    String? pageSize,
+    String? access,
+    String? expenseLimit,
+    String? expenseDate,
+  }) {
+    final Uri $url = Uri.parse('/workspaces/${workspaceId}/projects');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'name': name,
+      'strict-name-search': strictNameSearch,
+      'archived': archived,
+      'billable': billable,
+      'clients': clients,
+      'contains-client': containsClient,
+      'client-status': clientStatus,
+      'users': users,
+      'contains-user': containsUser,
+      'user-status': userStatus,
+      'is-template': isTemplate,
+      'sort-column': sortColumn,
+      'sort-order': sortOrder,
+      'hydrated': hydrated,
+      'page': page,
+      'page-size': pageSize,
+      'access': access,
+      'expense-limit': expenseLimit,
+      'expense-date': expenseDate,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<Project>, Project>($request);
+  }
+
+  @override
+  Future<Response<List<Client>>> getWorkspaceClients(
+    String workspaceId, {
+    String? name,
+    String? sortColumn,
+    String? sortOrder,
+    String? page,
+    String? pageSize,
+    bool? archived,
+  }) {
+    final Uri $url = Uri.parse('/workspaces/${workspaceId}/clients');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'name': name,
+      'sort-column': sortColumn,
+      'sort-order': sortOrder,
+      'page': page,
+      'page-size': pageSize,
+      'archived': archived,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<Client>, Client>($request);
+  }
 }

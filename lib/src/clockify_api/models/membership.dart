@@ -7,9 +7,9 @@ class Membership {
   final String userId;
   final String? hourlyRate;
   final String? costRate;
-  final String targetId;
-  final String membershipType;
-  final String membershipStatus;
+  final String? targetId;
+  final String? membershipType;
+  final String? membershipStatus;
 
   Membership({
     required this.userId,
