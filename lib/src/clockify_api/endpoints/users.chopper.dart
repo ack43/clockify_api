@@ -17,4 +17,19 @@ final class _$ClockifyApiUsersService extends ClockifyApiUsersService {
 
   @override
   final Type definitionType = ClockifyApiUsersService;
+
+  @override
+  Future<Response<User>> current({bool? includeMemberships}) {
+    final Uri $url = Uri.parse('/user');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'include-memberships': includeMemberships
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<User, User>($request);
+  }
 }

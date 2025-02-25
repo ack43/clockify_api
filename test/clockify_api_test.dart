@@ -7,16 +7,22 @@ void main() {
   final env = DotEnv(includePlatformEnvironment: true)..load();
 
   group('A group of tests', () {
-    final clockifyApi = ClockifyApi(token: env['CLOCKIFY_API_KEY']!);
+    final clockifyApi = ClockifyApi(apiKey: env['CLOCKIFY_API_KEY']!);
 
     test('First Test. chopper', () {
       expect(clockifyApi.chopper, isNotNull);
+    });
+    test('First Test. workspaces list', () async {
+      // Check if the response was successful
+      await clockifyApi.serviceWorkspaces.getWorkspaces().then((workspaces) {
+        print('workspaces: $workspaces');
+      });
     });
   });
 
   group('A group of failed tests', () {
     final clockifyApi =
-        ClockifyApi(token: env['CLOCKIFY_API_KEY'], url: "failed url");
+        ClockifyApi(apiKey: env['CLOCKIFY_API_KEY'], url: "failed url");
 
     test('First Test. chopper', () {
       expect(clockifyApi.chopper, isNull);
