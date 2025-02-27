@@ -19,11 +19,4 @@ abstract class ClockifyApiUsersService extends ChopperService {
   Future<Response<User>> current({
     @Query('include-memberships') bool? includeMemberships,
   });
-
-  ///
-  /// GET /user
-  /// Safe version
-  Future<User?> currentSafe({bool? includeMemberships}) =>
-      current(includeMemberships: includeMemberships)
-          .then((response) => response.isSuccessful ? response.body : null);
 }

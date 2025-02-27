@@ -43,7 +43,8 @@ void main() {
     test('should return an empty list if not successful', () async {
       final emptyWorkspaceId = 'invalidWorkspaceId';
       final response = await clockifyApi.serviceWorkspaces
-          .getWorkspaceClientsSafe(emptyWorkspaceId);
+          .getWorkspaceClients(emptyWorkspaceId)
+          .then((value) => value.body ?? []);
       expect(response, isEmpty);
     });
   });

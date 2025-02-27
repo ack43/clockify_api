@@ -6,26 +6,26 @@ void main() async {
 
   final clockifyApi = ClockifyApi(apiKey: env['CLOCKIFY_API_KEY']!);
 
-  // await clockifyApi.serviceWorkspaces.getWorkspaces().then((ws) => print(ws));
-  // await clockifyApi.serviceWorkspaces
-  //     .getWorkspacesSafe()
-  //     .then((ws) => print(ws));
+  await clockifyApi.serviceWorkspaces.getWorkspaces().then((ws) => print(ws));
 
-  // await clockifyApi.userService.current().then((ws) => print(ws));
-  // await clockifyApi.userService.currentSafe().then((ws) => print(ws));
+  await clockifyApi.serviceUsers.current().then((ws) => print(ws));
 
-  await clockifyApi.serviceWorkspaces.getWorkspacesSafe().then((wss) {
-    print('wss (${wss.length}) - $wss');
-    for (final ws in wss) {
-      print('ws (${ws.id}) / users ');
-      clockifyApi.serviceWorkspaces.getWorkspaceUsers(ws.id).then(
-        (usersResponse) {
-          print(usersResponse);
-          if (usersResponse.isSuccessful) {
-            print('suc : ${usersResponse.body}');
-          }
-        },
-      );
+  await clockifyApi.serviceWorkspaces.getWorkspaces().then((wsResponse) {
+    print('wsResponse (${wsResponse.isSuccessful})');
+    if (wsResponse.isSuccessful) {
+      final wss = wsResponse.body ?? [];
+      print('wss (${wss.length})');
+      for (final ws in wss) {
+        print('ws (${ws.id}) / users ');
+        clockifyApi.serviceWorkspaces.getWorkspaceUsers(ws.id).then(
+          (usersResponse) {
+            print(usersResponse);
+            if (usersResponse.isSuccessful) {
+              print('suc : ${usersResponse.body}');
+            }
+          },
+        );
+      }
     }
   });
 

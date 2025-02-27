@@ -73,11 +73,6 @@ class _JsonTypeConverter extends JsonConverter {
   FutureOr<Response<BodyType>> convertResponse<BodyType, InnerType>(
       Response response) {
     final jsonMap = json.decode(response.bodyString);
-    print('jsonMap - ${jsonMap.toString()}');
-    print('');
-    print('');
-    print('');
-    print('');
 
     if (jsonMap is Map<String, dynamic>) {
       final fromJson = _factories[InnerType];
