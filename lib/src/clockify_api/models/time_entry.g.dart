@@ -43,10 +43,11 @@ Map<String, dynamic> _$TimeEntryToJson(TimeEntry instance) => <String, dynamic>{
       'billable': instance.billable,
       'isLocked': instance.isLocked,
       'tagIds': instance.tagIds,
-      'timeInterval': instance.timeInterval,
-      'costRate': instance.costRate,
-      'hourlyRate': instance.hourlyRate,
-      'customFieldValues': instance.customFieldValues,
+      'timeInterval': instance.timeInterval.toJson(),
+      'costRate': instance.costRate?.toJson(),
+      'hourlyRate': instance.hourlyRate?.toJson(),
+      'customFieldValues':
+          instance.customFieldValues?.map((e) => e.toJson()).toList(),
       'type': instance.type,
     };
 

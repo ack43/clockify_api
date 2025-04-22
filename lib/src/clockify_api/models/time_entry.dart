@@ -4,7 +4,7 @@ import 'rate.dart';
 import 'custom_field.dart';
 part 'time_entry.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class TimeEntry {
   final String id;
   final String workspaceId;

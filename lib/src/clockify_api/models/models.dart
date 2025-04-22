@@ -3,3 +3,4 @@ export 'project.dart';
 export 'client.dart';
 export 'workspace.dart';
 export 'time_entry.dart';
+export 'task.dart';

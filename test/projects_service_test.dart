@@ -34,6 +34,7 @@ void main() {
         page: '1',
         pageSize: '50',
       );
+      // response.body?.forEach((pr) => print('${pr.id} - ${pr.name}'));
       expect(response.isSuccessful, true);
       expect(response.body, isNotEmpty);
     });

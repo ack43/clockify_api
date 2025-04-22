@@ -4,6 +4,7 @@ import '../models/workspace.dart';
 import '../models/project.dart';
 import '../models/client.dart';
 import '../models/time_entry.dart';
+import '../models/task.dart';
 import '../models/user.dart' show User;
 
 // This is necessary for the generator to work.
@@ -87,7 +88,7 @@ abstract class ClockifyApiWorkspacesService extends ChopperService {
     @Query('expense-date') String? expenseDate,
   });
 
-  /// GET /workspaces/{workspaceId}/projects
+  /// GET /workspaces/{workspaceId}/projects/{id}
   /// https://docs.clockify.me/#tag/Project/operation/getProject
   /// Find project by ID
   /// Return Response with Project.
@@ -100,6 +101,34 @@ abstract class ClockifyApiWorkspacesService extends ChopperService {
     @Query('expense-limit') String? expenseLimit,
     @Query('expense-date') String? expenseDate,
   });
+
+  /// GET /workspaces/{workspaceId}/projects/{projectId}/tasks
+  /// https://docs.clockify.me/#tag/Project/operation/getProject
+  /// Find tasks for project by projectId
+  /// Returns a list of tasks for the specified project.
+  @GET(path: '/{workspaceId}/projects/{projectId}/tasks')
+  Future<Response<List<Task>>> tasks(
+    @Path('workspaceId') String workspaceId,
+    @Path('projectId') String projectId, {
+    @Query('name') String? name,
+    @Query('strict-name-search') bool? strictNameSearch,
+    @Query('is-active') bool? isActive,
+    @Query('page') int? page,
+    @Query('page-size') int? pageSize,
+    @Query('sort-column') String? sortColumn, // or maybe use an enum
+    @Query('sort-order') String? sortOrder, // or maybe use an enum
+  });
+
+  /// GET /workspaces/{workspaceId}/projects/{projectId}/tasks/{id}
+  /// https://docs.clockify.me/#tag/Project/operation/getProject
+  /// Find tasks by ID (and projectId with workspaceId)
+  /// Return Response with Task.
+  @GET(path: '/{workspaceId}/projects/{projectId}/tasks/{id}')
+  Future<Response<List<Task>>> task(
+    @Path('workspaceId') String workspaceId,
+    @Path('projectId') String projectId,
+    @Path('id') String taskId,
+  );
 
   ///
   ///

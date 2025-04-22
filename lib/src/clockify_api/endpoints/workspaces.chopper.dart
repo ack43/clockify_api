@@ -160,6 +160,54 @@ final class _$ClockifyApiWorkspacesService
   }
 
   @override
+  Future<Response<List<Task>>> tasks(
+    String workspaceId,
+    String projectId, {
+    String? name,
+    bool? strictNameSearch,
+    bool? isActive,
+    int? page,
+    int? pageSize,
+    String? sortColumn,
+    String? sortOrder,
+  }) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/projects/${projectId}/tasks');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'name': name,
+      'strict-name-search': strictNameSearch,
+      'is-active': isActive,
+      'page': page,
+      'page-size': pageSize,
+      'sort-column': sortColumn,
+      'sort-order': sortOrder,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<Task>, Task>($request);
+  }
+
+  @override
+  Future<Response<List<Task>>> task(
+    String workspaceId,
+    String projectId,
+    String taskId,
+  ) {
+    final Uri $url = Uri.parse(
+        '/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<Task>, Task>($request);
+  }
+
+  @override
   Future<Response<List<Client>>> clients(
     String workspaceId, {
     String? name,

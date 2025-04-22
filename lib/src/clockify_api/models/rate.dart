@@ -24,6 +24,7 @@ class CostRate extends Rate {
   factory CostRate.fromJson(Map<String, dynamic> json) =>
       _$CostRateFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$CostRateToJson(this);
 }
 
@@ -37,6 +38,7 @@ class HourlyRate extends Rate {
   factory HourlyRate.fromJson(Map<String, dynamic> json) =>
       _$HourlyRateFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$HourlyRateToJson(this);
 }
 

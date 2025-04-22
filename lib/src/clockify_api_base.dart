@@ -41,6 +41,7 @@ class ClockifyApi {
             Client: (json) => Client.fromJson(json),
             Project: (json) => Project.fromJson(json),
             TimeEntry: (json) => TimeEntry.fromJson(json),
+            Task: (json) => Task.fromJson(json),
           }),
           interceptors: interceptors +
               [
