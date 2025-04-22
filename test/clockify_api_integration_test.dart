@@ -39,8 +39,8 @@ void main() {
   group('ClockifyApi Integration Tests', () {
     test('getWorkspacesSafe returns a non-empty list of workspaces', () async {
       try {
-        final workspaces = await clockifyApi.serviceWorkspaces
-            .getWorkspaces()
+        final workspaces = await clockifyApi.workspaces
+            .list()
             .then((response) => response.body ?? []);
         expect(workspaces, isNotNull);
         expect(workspaces, isA<List<Workspace>>());
@@ -53,8 +53,8 @@ void main() {
     });
 
     test('getWorkspaceSafe returns a valid workspace for a given id', () async {
-      final workspace = await clockifyApi.serviceWorkspaces
-          .getWorkspace(workspaceId)
+      final workspace = await clockifyApi.workspaces
+          .get(workspaceId)
           .then((response) => response.body);
       expect(workspace, isNotNull,
           reason: 'Workspace not found for id: $workspaceId');
@@ -66,8 +66,8 @@ void main() {
 
     test('getWorkspaceUsersSafe returns a list of users for a given workspace',
         () async {
-      final users = await clockifyApi.serviceWorkspaces
-          .getWorkspaceUsers(workspaceId)
+      final users = await clockifyApi.workspaces
+          .users(workspaceId)
           .then((response) => response.body ?? []);
       ;
       expect(users, isNotNull);
@@ -76,9 +76,8 @@ void main() {
     });
 
     test('currentSafe returns the current logged-in user info', () async {
-      final user = await clockifyApi.serviceUsers
-          .current()
-          .then((response) => response.body);
+      final user =
+          await clockifyApi.users.current().then((response) => response.body);
       expect(user, isNotNull, reason: 'No user is currently logged in.');
       print('user - ${user?.id}');
       if (user != null) {
@@ -87,9 +86,8 @@ void main() {
     });
 
     test('currentSafe returns the current logged-in user id', () async {
-      final user = await clockifyApi.serviceUsers
-          .current()
-          .then((response) => response.body);
+      final user =
+          await clockifyApi.users.current().then((response) => response.body);
       expect(user, isNotNull, reason: 'No user is currently logged in.');
       if (user != null) {
         expect(user.id, isNotEmpty, reason: 'User ID should not be empty.');
@@ -100,7 +98,7 @@ void main() {
     });
 
     test('current method returns a successful response', () async {
-      final response = await clockifyApi.serviceUsers.current();
+      final response = await clockifyApi.users.current();
       expect(response.isSuccessful, true,
           reason: 'The response should be successful.');
       expect(response.body, isNotNull,
@@ -109,7 +107,7 @@ void main() {
     });
 
     test('current method returns valid user data', () async {
-      final response = await clockifyApi.serviceUsers.current();
+      final response = await clockifyApi.users.current();
       expect(response.body, isNotNull,
           reason: 'The response body should not be null.');
       final user = response.body;

@@ -13,6 +13,7 @@ abstract class ClockifyApiUsersService extends ChopperService {
 
   ///
   /// GET /user
+  /// https://docs.clockify.me/#tag/User/operation/getLoggedUser
   /// Get currently logged-in user's info
   /// Return Response with User.
   @GET()

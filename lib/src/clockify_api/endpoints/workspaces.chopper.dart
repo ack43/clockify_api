@@ -20,7 +20,7 @@ final class _$ClockifyApiWorkspacesService
   final Type definitionType = ClockifyApiWorkspacesService;
 
   @override
-  Future<Response<List<Workspace>>> getWorkspaces() {
+  Future<Response<List<Workspace>>> list() {
     final Uri $url = Uri.parse('/workspaces');
     final Request $request = Request(
       'GET',
@@ -31,7 +31,7 @@ final class _$ClockifyApiWorkspacesService
   }
 
   @override
-  Future<Response<Workspace>> getWorkspace(String workspaceId) {
+  Future<Response<Workspace>> get(String workspaceId) {
     final Uri $url = Uri.parse('/workspaces/${workspaceId}');
     final Request $request = Request(
       'GET',
@@ -42,18 +42,45 @@ final class _$ClockifyApiWorkspacesService
   }
 
   @override
-  Future<Response<List<User>>> getWorkspaceUsers(String workspaceId) {
+  Future<Response<List<User>>> users(
+    String workspaceId, {
+    String? email,
+    String? projectId,
+    String? status,
+    String? accountStatuses,
+    String? name,
+    String? sortColumn,
+    String? sortOrder,
+    String? page,
+    String? pageSize,
+    String? memberships,
+    String? includeRoles,
+  }) {
     final Uri $url = Uri.parse('/workspaces/${workspaceId}/users');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'email': email,
+      'project-id': projectId,
+      'status': status,
+      'account-statuses': accountStatuses,
+      'name': name,
+      'sort-column': sortColumn,
+      'sort-order': sortOrder,
+      'page': page,
+      'page-size': pageSize,
+      'memberships': memberships,
+      'include-roles': includeRoles,
+    };
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+      parameters: $params,
     );
     return client.send<List<User>, User>($request);
   }
 
   @override
-  Future<Response<List<Project>>> getWorkspaceProjects(
+  Future<Response<List<Project>>> projects(
     String workspaceId, {
     String? name,
     bool? strictNameSearch,
@@ -107,7 +134,33 @@ final class _$ClockifyApiWorkspacesService
   }
 
   @override
-  Future<Response<List<Client>>> getWorkspaceClients(
+  Future<Response<List<Project>>> getProject(
+    String workspaceId,
+    String projectId, {
+    String? hydrated,
+    String? customFieldEntityType,
+    String? expenseLimit,
+    String? expenseDate,
+  }) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/projects/${projectId}');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'hydrated': hydrated,
+      'custom-field-entity-type': customFieldEntityType,
+      'expense-limit': expenseLimit,
+      'expense-date': expenseDate,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<Project>, Project>($request);
+  }
+
+  @override
+  Future<Response<List<Client>>> clients(
     String workspaceId, {
     String? name,
     String? sortColumn,
@@ -132,5 +185,105 @@ final class _$ClockifyApiWorkspacesService
       parameters: $params,
     );
     return client.send<List<Client>, Client>($request);
+  }
+
+  @override
+  Future<Response<List<Project>>> getClient(
+    String workspaceId,
+    String clientId,
+  ) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/clients/${clientId}');
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+    );
+    return client.send<List<Project>, Project>($request);
+  }
+
+  @override
+  Future<Response<List<TimeEntry>>> timeEntries(
+    String workspaceId,
+    String userId, {
+    String? description,
+    String? start,
+    String? end,
+    String? project,
+    String? task,
+    List<String>? tags,
+    bool? projectRequired,
+    bool? taskRequired,
+    bool? hydrated,
+    int? page,
+    int? pageSize,
+    bool? inProgress,
+    String? getWeekBefore,
+  }) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/user/${userId}/time-entries');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'description': description,
+      'start': start,
+      'end': end,
+      'project': project,
+      'task': task,
+      'tags': tags,
+      'project-required': projectRequired,
+      'task-required': taskRequired,
+      'hydrated': hydrated,
+      'page': page,
+      'page-size': pageSize,
+      'in-progress': inProgress,
+      'get-week-before': getWeekBefore,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<TimeEntry>, TimeEntry>($request);
+  }
+
+  @override
+  Future<Response<List<TimeEntry>>> timeEntriesInProgress(
+    String workspaceId, {
+    int? page,
+    int? pageSize,
+  }) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/time-entries/status/in-progress');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'page': page,
+      'page-size': pageSize,
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<List<TimeEntry>, TimeEntry>($request);
+  }
+
+  @override
+  Future<Response<TimeEntry>> getTimeEntry(
+    String workspaceId,
+    String timeEntryId, {
+    bool? hydrated,
+  }) {
+    final Uri $url =
+        Uri.parse('/workspaces/${workspaceId}/time-entries/${timeEntryId}');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'hydrated': hydrated
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<TimeEntry, TimeEntry>($request);
   }
 }

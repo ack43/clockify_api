@@ -22,3 +22,15 @@ Map<String, dynamic> _$CustomFieldToJson(CustomField instance) =>
       'userId': instance.userId,
       'value': instance.value,
     };
+
+CustomFieldValue _$CustomFieldValueFromJson(Map<String, dynamic> json) =>
+    CustomFieldValue(
+      customFieldId: json['customFieldId'] as String,
+      value: json['value'],
+    );
+
+Map<String, dynamic> _$CustomFieldValueToJson(CustomFieldValue instance) =>
+    <String, dynamic>{
+      'customFieldId': instance.customFieldId,
+      'value': instance.value,
+    };

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'cost_rate.dart';
-import 'membership.dart';
+import 'rate.dart';
+import 'user.dart';
 
 part 'project.g.dart';
 

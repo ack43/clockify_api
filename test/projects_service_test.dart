@@ -18,14 +18,13 @@ void main() {
 
   group('Projects API tests', () {
     test('should retrieve projects successfully', () async {
-      final response =
-          await clockifyApi.serviceWorkspaces.getWorkspaceProjects(workspaceId);
+      final response = await clockifyApi.workspaces.projects(workspaceId);
       expect(response.isSuccessful, true);
       expect(response.body, isNotEmpty);
     });
 
     test('should retrieve projects with optional parameters', () async {
-      final response = await clockifyApi.serviceWorkspaces.getWorkspaceProjects(
+      final response = await clockifyApi.workspaces.projects(
         workspaceId,
         // name: 'Software Development',
         // archived: 'false',
@@ -41,8 +40,8 @@ void main() {
 
     test('should return an empty list if not successful', () async {
       final emptyWorkspaceId = 'invalidWorkspaceId';
-      final response = await clockifyApi.serviceWorkspaces
-          .getWorkspaceProjects(emptyWorkspaceId)
+      final response = await clockifyApi.workspaces
+          .projects(emptyWorkspaceId)
           .then((response) => response.body ?? []);
       ;
       expect(response, isEmpty);

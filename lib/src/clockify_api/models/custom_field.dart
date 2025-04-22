@@ -23,3 +23,15 @@ class CustomField {
 
   Map<String, dynamic> toJson() => _$CustomFieldToJson(this);
 }
+
+@JsonSerializable()
+class CustomFieldValue {
+  final String customFieldId;
+  final dynamic value;
+
+  CustomFieldValue({required this.customFieldId, required this.value});
+
+  factory CustomFieldValue.fromJson(Map<String, dynamic> json) =>
+      _$CustomFieldValueFromJson(json);
+  Map<String, dynamic> toJson() => _$CustomFieldValueToJson(this);
+}

@@ -238,7 +238,7 @@ void main() {
 
     test('getWorkspacesSafe returns a list of workspaces', () async {
       final workspaces =
-          await service.getWorkspaces().then((response) => response.body ?? []);
+          await service.list().then((response) => response.body ?? []);
       print('workspaces - $workspaces');
       expect(workspaces, isNotNull);
       expect(workspaces, isA<List<Workspace>>());
@@ -247,9 +247,8 @@ void main() {
     });
 
     test('getWorkspaceSafe returns a workspace for a valid id', () async {
-      final workspace = await service
-          .getWorkspace('workspace1')
-          .then((response) => response.body);
+      final workspace =
+          await service.get('workspace1').then((response) => response.body);
       print('workspace - $workspace');
       expect(workspace, isNotNull);
       expect(workspace?.id, equals('workspace1'));
@@ -258,7 +257,7 @@ void main() {
 
     test('getWorkspaceUsersSafe returns a list of users', () async {
       final users = await service
-          .getWorkspaceUsers('workspace1')
+          .users('workspace1')
           .then((response) => response.body ?? []);
       print('users - $users');
       expect(users, isNotNull);

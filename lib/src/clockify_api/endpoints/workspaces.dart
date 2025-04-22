@@ -1,8 +1,9 @@
 import "dart:async";
 import 'package:chopper/chopper.dart';
 import '../models/workspace.dart';
-import '../models/project.dart'; // Import the Project model
-import '../models/client.dart'; // Import the Client model
+import '../models/project.dart';
+import '../models/client.dart';
+import '../models/time_entry.dart';
 import '../models/user.dart' show User;
 
 // This is necessary for the generator to work.
@@ -16,35 +17,54 @@ abstract class ClockifyApiWorkspacesService extends ChopperService {
 
   ///
   /// GET /workspaces
+  /// https://docs.clockify.me/#tag/Workspace/operation/getWorkspacesOfUser
   /// Retrieves a list of all workspaces.
   /// Return Response with List`<Workspace`>.
   @GET()
-  Future<Response<List<Workspace>>> getWorkspaces();
+  Future<Response<List<Workspace>>> list();
 
   ///
   /// GET /workspaces/{id}
+  /// https://docs.clockify.me/#tag/Workspace/operation/getWorkspaceOfUser
   /// Retrieves a specific workspace by ID.
   /// Return Response with Workspace.
   @GET(path: '/{id}')
-  Future<Response<Workspace>> getWorkspace(
+  Future<Response<Workspace>> get(
     @Path('id') String workspaceId,
   );
 
+  ///
+  ///
   ///
   /// GET /workspaces/{id}/users
-  /// Retrieves users for a specific workspace by ID.
-  /// Return Response with List`<User`>.
+  /// https://docs.clockify.me/#tag/User/operation/getUsersOfWorkspace
+  /// Retrieves users for a specific workspace by ID with optional query filters.
+  /// Returns Response with List<User>.
   @GET(path: '/{id}/users')
-  Future<Response<List<User>>> getWorkspaceUsers(
-    @Path('id') String workspaceId,
-  );
+  Future<Response<List<User>>> users(
+    @Path('id') String workspaceId, {
+    @Query('email') String? email,
+    @Query('project-id') String? projectId,
+    @Query('status') String? status, // Enum: "PENDING", "ACTIVE", etc.
+    @Query('account-statuses') String? accountStatuses,
+    @Query('name') String? name,
+    @Query('sort-column') String? sortColumn, // Enum: "ID", "EMAIL", etc.
+    @Query('sort-order') String? sortOrder, // Enum: "ASCENDING", "DESCENDING"
+    @Query('page') String? page,
+    @Query('page-size') String? pageSize,
+    @Query('memberships') String? memberships, // Enum: "ALL", "NONE", etc.
+    @Query('include-roles') String? includeRoles, // Default: "false"
+  });
 
   ///
+  ///
+  ///
   /// GET /workspaces/{workspaceId}/projects
+  /// https://docs.clockify.me/#tag/Project/operation/getProjects
   /// Retrieves a list of projects for a specific workspace by ID with optional query parameters.
   /// Return Response with List`<Project>`.
   @GET(path: '/{workspaceId}/projects')
-  Future<Response<List<Project>>> getWorkspaceProjects(
+  Future<Response<List<Project>>> projects(
     @Path('workspaceId') String workspaceId, {
     @Query('name') String? name,
     @Query('strict-name-search') bool? strictNameSearch,
@@ -67,12 +87,29 @@ abstract class ClockifyApiWorkspacesService extends ChopperService {
     @Query('expense-date') String? expenseDate,
   });
 
+  /// GET /workspaces/{workspaceId}/projects
+  /// https://docs.clockify.me/#tag/Project/operation/getProject
+  /// Find project by ID
+  /// Return Response with Project.
+  @GET(path: '/{workspaceId}/projects/{id}')
+  Future<Response<List<Project>>> getProject(
+    @Path('workspaceId') String workspaceId,
+    @Path('id') String projectId, {
+    @Query('hydrated') String? hydrated,
+    @Query('custom-field-entity-type') String? customFieldEntityType,
+    @Query('expense-limit') String? expenseLimit,
+    @Query('expense-date') String? expenseDate,
+  });
+
+  ///
+  ///
   ///
   /// GET /workspaces/{workspaceId}/clients
+  /// https://docs.clockify.me/#tag/Client/operation/getClients
   /// Retrieves a list of clients for a specific workspace by ID with optional query parameters.
   /// Return Response with List`<Client>`.
   @GET(path: '/{workspaceId}/clients')
-  Future<Response<List<Client>>> getWorkspaceClients(
+  Future<Response<List<Client>>> clients(
     @Path('workspaceId') String workspaceId, {
     @Query('name') String? name,
     @Query('sort-column') String? sortColumn,
@@ -80,5 +117,63 @@ abstract class ClockifyApiWorkspacesService extends ChopperService {
     @Query('page') String? page,
     @Query('page-size') String? pageSize,
     @Query('archived') bool? archived,
+  });
+
+  /// GET /workspaces/{workspaceId}/clients/{id}
+  /// https://docs.clockify.me/#tag/Client/operation/getClient
+  /// Get client by ID
+  /// Return Response with Client.
+  @GET(path: '/{workspaceId}/clients/{id}')
+  Future<Response<List<Project>>> getClient(
+    @Path('workspaceId') String workspaceId,
+    @Path('id') String clientId,
+  );
+
+  ///
+  ///
+  ///
+  /// GET /workspaces/{workspaceId}/time-entries
+  /// https://docs.clockify.me/#tag/Time-entry/operation/getTimeEntries
+  /// Get time entries for a user on workspace
+  /// Returns Response with a list of time entries.
+  @GET(path: '/{workspaceId}/user/{userId}/time-entries')
+  Future<Response<List<TimeEntry>>> timeEntries(
+    @Path('workspaceId') String workspaceId,
+    @Path('userId') String userId, {
+    @Query('description') String? description,
+    @Query('start') String? start,
+    @Query('end') String? end,
+    @Query('project') String? project,
+    @Query('task') String? task,
+    @Query('tags') List<String>? tags,
+    @Query('project-required') bool? projectRequired,
+    @Query('task-required') bool? taskRequired,
+    @Query('hydrated') bool? hydrated,
+    @Query('page') int? page,
+    @Query('page-size') int? pageSize,
+    @Query('in-progress') bool? inProgress,
+    @Query('get-week-before') String? getWeekBefore,
+  });
+
+  /// GET /workspaces/{workspaceId}/time-entries/status/in-progress
+  /// https://docs.clockify.me/#tag/Time-entry/operation/getInProgressTimeEntries
+  /// Retrieves in-progress time entries for a specific workspace.
+  /// Returns Response with a list of time entries.
+  @GET(path: '/{workspaceId}/time-entries/status/in-progress')
+  Future<Response<List<TimeEntry>>> timeEntriesInProgress(
+    @Path('workspaceId') String workspaceId, {
+    @Query('page') int? page,
+    @Query('page-size') int? pageSize,
+  });
+
+  /// GET /workspaces/{workspaceId}/time-entries/{id}
+  /// https://docs.clockify.me/#tag/Time-entry/operation/getTimeEntry
+  /// Get a specific time entry on workspace
+  /// Returns Response time entry.
+  @GET(path: '/{workspaceId}/time-entries/{id}')
+  Future<Response<TimeEntry>> getTimeEntry(
+    @Path('workspaceId') String workspaceId,
+    @Path('id') String timeEntryId, {
+    @Query('hydrated') bool? hydrated,
   });
 }
