@@ -1,7 +1,7 @@
 name: clockify_api
 description: A starting point for Dart libraries or applications.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+version: 0.1.0
+repository: https://github.com/ack43/clockify_api
 
 environment:
   sdk: ^3.6.1
