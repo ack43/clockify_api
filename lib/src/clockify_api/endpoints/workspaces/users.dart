@@ -2,7 +2,6 @@ import "dart:async";
 import 'package:chopper/chopper.dart';
 
 import '../../models/user.dart';
-import 'user/time_entries.dart';
 
 part "users.chopper.dart";
 
@@ -18,7 +17,7 @@ abstract class ClockifyApiWorkspaceUsersService extends ChopperService {
   /// GET /workspaces/{workspaceId}
   /// https://docs.clockify.me/#tag/User/operation/getUsersOfWorkspace
   /// Retrieves users for a specific workspace by ID with optional query filters.
-  /// Returns Response with List<User>.
+  /// Returns Response with List of User.
   @GET(path: '/{workspaceId}/users')
   Future<Response<List<User>>> users(
     @Path('workspaceId') String workspaceId, {

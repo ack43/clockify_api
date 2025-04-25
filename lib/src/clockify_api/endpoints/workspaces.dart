@@ -1,10 +1,6 @@
 import "dart:async";
 import 'package:chopper/chopper.dart';
 import '../models/workspace.dart';
-import '../models/project.dart';
-import '../models/client.dart';
-import '../models/time_entry.dart';
-import '../models/user.dart' show User;
 
 import 'workspaces/clients.dart';
 import 'workspaces/projects.dart';

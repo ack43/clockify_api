@@ -18,7 +18,7 @@ abstract class ClockifyApiWorkspaceUserService extends ChopperService {
   /// GET /workspaces/{id}
   /// https://docs.clockify.me/#tag/User/operation/getUsersOfWorkspace
   /// Retrieves users for a specific workspace by ID with optional query filters.
-  /// Returns Response with List<User>.
+  /// Returns Response with List of User.
   @GET(path: '/{workspaceId}/user/{userId}')
   Future<Response<User>> user(
       @Path('workspaceId') String workspaceId, @Path('userId') String userId);
