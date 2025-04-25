@@ -20,7 +20,7 @@ void main() {
 
   group('Clients API tests', () {
     test('should retrieve clients successfully', () async {
-      final response = await clockifyApi.workspaces.clients(workspaceId);
+      final response = await clockifyApi.workspace(workspaceId).clients.get();
       print("workspaceId - $workspaceId");
       print("response - $response");
       print(response.body?.map((client) => client.name).toList());
@@ -29,23 +29,24 @@ void main() {
     });
 
     test('should retrieve clients with optional parameters', () async {
-      final response = await clockifyApi.workspaces.clients(
-        workspaceId,
-        // name: 'Client X',
-        sortColumn: 'NAME',
-        sortOrder: 'ASCENDING',
-        page: '1',
-        pageSize: '50',
-        // archived: false,
-      );
+      final response = await clockifyApi.workspace(workspaceId).clients.get(
+            // name: 'Client X',
+            sortColumn: 'NAME',
+            sortOrder: 'ASCENDING',
+            page: 1,
+            pageSize: 50,
+            // archived: false,
+          );
       expect(response.isSuccessful, true);
       expect(response.body, isNotEmpty);
     });
 
     test('should return an empty list if not successful', () async {
       final emptyWorkspaceId = 'invalidWorkspaceId';
-      final response = await clockifyApi.workspaces
-          .clients(emptyWorkspaceId)
+      final response = await clockifyApi
+          .workspace(emptyWorkspaceId)
+          .clients
+          .get()
           .then((value) => value.body ?? []);
       expect(response, isEmpty);
     });

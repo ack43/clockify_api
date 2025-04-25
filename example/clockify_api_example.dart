@@ -8,36 +8,40 @@ void main() async {
 
   final clockifyApi = ClockifyApi(apiKey: env['CLOCKIFY_API_KEY']!);
 
-  final wss = await clockifyApi.workspaces.list().then((ws) => ws.body);
+  final wss = await clockifyApi.workspaces.get().then((ws) => ws.body);
   print('all ws: ${wss?.length}');
   final currentWs =
-      await clockifyApi.workspaces.list().then((ws) => ws.body?.first);
+      await clockifyApi.workspaces.get().then((ws) => ws.body?.first);
   print('currentWs (${currentWs?.id}) - ${currentWs?.name}');
 
   final currentUser = await clockifyApi.users.current().then((ws) => ws.body);
 
-  // await clockifyApi.serviceWorkspaces.getWorkspaces().then((wsResponse) {
-  //   print('wsResponse (${wsResponse.isSuccessful})');
-  //   if (wsResponse.isSuccessful) {
-  //     final wss = wsResponse.body ?? [];
-  //     print('wss (${wss.length})');
-  //     for (final ws in wss) {
-  //       print('ws (${ws.id}) / users ');
-  //       clockifyApi.serviceWorkspaces.getWorkspaceUsers(ws.id).then(
-  //         (usersResponse) {
-  //           print(usersResponse);
-  //           if (usersResponse.isSuccessful) {
-  //             print('suc : ${usersResponse.body}');
-  //           }
-  //         },
-  //       );
-  //     }
-  //   }
-  // });
+  clockifyApi.workspace('workspaceId').projects.get(pageSize: 10);
+
+  await clockifyApi.workspaces.get().then((wsResponse) {
+    print('wsResponse (${wsResponse.isSuccessful})');
+    if (wsResponse.isSuccessful) {
+      final wss = wsResponse.body ?? [];
+      print('wss (${wss.length})');
+      for (final ws in wss) {
+        print('ws (${ws.id}) / users ');
+        clockifyApi.workspace(ws.id).users.get().then(
+          (usersResponse) {
+            print(usersResponse);
+            if (usersResponse.isSuccessful) {
+              print('suc : ${usersResponse.body}');
+            }
+          },
+        );
+      }
+    }
+  });
 
   if (currentWs != null) {
-    await clockifyApi.workspaces
-        .timeEntriesInProgress(currentWs.id)
+    await clockifyApi
+        .workspace(currentWs.id)
+        .timeEntries
+        .inProgress()
         .then((timeEntriesResponse) {
       final timeEntries = timeEntriesResponse.body;
       if (timeEntries != null && timeEntries.isNotEmpty) {
@@ -57,13 +61,14 @@ void main() async {
           .subtract(const Duration(seconds: 1));
       final isoEnd = todayEnd.toIso8601String();
 
-      await clockifyApi.workspaces
-          .timeEntries(
-        currentWs.id,
-        currentUser.id,
-        start: isoStart,
-        end: isoEnd,
-      )
+      await clockifyApi
+          .workspace(currentWs.id)
+          .user(currentUser.id)
+          .timeEntries
+          .get(
+            start: isoStart,
+            end: isoEnd,
+          )
           .then((timeEntriesResponse) {
         final timeEntries = timeEntriesResponse.body;
         if (timeEntries != null) {
@@ -77,19 +82,24 @@ void main() async {
     }
   }
 
-  // if (currentWs != null && currentUser != null) {
-  //   await clockifyApi.serviceWorkspaces
-  //       .getUserTimeEntries(currentWs.id, currentUser.id, pageSize: 5000)
-  //       .then((timeEntriesResponse) {
-  //     print(timeEntriesResponse.body?.length);
-  //     clockifyApi.serviceWorkspaces
-  //         .getTimeEntry(currentWs.id,
-  //             ((timeEntriesResponse.body ?? []).toList()..shuffle()).first.id)
-  //         .then((timeEntry) {
-  //       print(timeEntry.body?.toJson());
-  //     });
-  //   });
-  // }
+  if (currentWs != null && currentUser != null) {
+    await clockifyApi
+        .workspace(currentWs.id)
+        .user(currentUser.id)
+        .timeEntries
+        .get(pageSize: 5000)
+        .then((timeEntriesResponse) {
+      print(timeEntriesResponse.body?.length);
+      clockifyApi
+          .workspace(currentWs.id)
+          .timeEntry(
+              ((timeEntriesResponse.body ?? []).toList()..shuffle()).first.id)
+          .get()
+          .then((timeEntry) {
+        print(timeEntry.body?.toJson());
+      });
+    });
+  }
 
   return;
 }

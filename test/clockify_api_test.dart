@@ -17,7 +17,7 @@ void main() {
     });
     test('First Test. workspaces list', () async {
       // Check if the response was successful
-      await clockifyApi.workspaces.list().then((workspaces) {
+      await clockifyApi.workspaces.get().then((workspaces) {
         print('workspaces: $workspaces');
       });
     });

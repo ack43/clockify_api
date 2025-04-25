@@ -21,3 +21,11 @@ abstract class ClockifyApiUsersService extends ChopperService {
     @Query('include-memberships') bool? includeMemberships,
   });
 }
+
+class UsersRef {
+  final ClockifyApiUsersService _service;
+
+  UsersRef(this._service);
+
+  Future<Response<User>> current() => _service.current();
+}

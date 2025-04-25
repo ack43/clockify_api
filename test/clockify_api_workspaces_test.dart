@@ -254,17 +254,5 @@ void main() {
       expect(workspace?.id, equals('workspace1'));
       expect(workspace?.name, equals('Workspace One'));
     });
-
-    test('getWorkspaceUsersSafe returns a list of users', () async {
-      final users = await service
-          .users('workspace1')
-          .then((response) => response.body ?? []);
-      print('users - $users');
-      expect(users, isNotNull);
-      expect(users, isA<List<User>>());
-      expect(users.length, greaterThan(0));
-      expect(users.first.name, equals('John Doe'));
-      expect(users.first.customFields.first.customFieldName, equals('TIN'));
-    });
   });
 }

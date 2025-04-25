@@ -40,7 +40,7 @@ void main() {
     test('getWorkspacesSafe returns a non-empty list of workspaces', () async {
       try {
         final workspaces = await clockifyApi.workspaces
-            .list()
+            .get()
             .then((response) => response.body ?? []);
         expect(workspaces, isNotNull);
         expect(workspaces, isA<List<Workspace>>());
@@ -53,8 +53,9 @@ void main() {
     });
 
     test('getWorkspaceSafe returns a valid workspace for a given id', () async {
-      final workspace = await clockifyApi.workspaces
-          .get(workspaceId)
+      final workspace = await clockifyApi
+          .workspace(workspaceId)
+          .get()
           .then((response) => response.body);
       expect(workspace, isNotNull,
           reason: 'Workspace not found for id: $workspaceId');
@@ -66,8 +67,10 @@ void main() {
 
     test('getWorkspaceUsersSafe returns a list of users for a given workspace',
         () async {
-      final users = await clockifyApi.workspaces
-          .users(workspaceId)
+      final users = await clockifyApi
+          .workspace(workspaceId)
+          .users
+          .get()
           .then((response) => response.body ?? []);
       ;
       expect(users, isNotNull);

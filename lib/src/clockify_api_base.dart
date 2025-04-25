@@ -1,5 +1,4 @@
 import 'package:chopper/chopper.dart';
-
 import 'dart:async';
 import 'dart:convert';
 
@@ -8,33 +7,24 @@ import 'clockify_api/models/models.dart';
 
 class ClockifyApi {
   static const String url = 'https://api.clockify.me/api/v1';
-  static const String apiKeyHeader = 'X-Api-Key'; // or X-Addon-Token
+  static const String apiKeyHeader = 'X-Api-Key';
   static const String marketplaceKeyHeader = 'X-Marketplace-Key';
-
-  // maybe remove?
-  final String? _apiKey;
-  final String? _marketplaceKey;
 
   final ChopperClient chopper;
 
-  ClockifyApi.chopper(this.chopper)
-      : _apiKey = null,
-        _marketplaceKey = null;
+  ClockifyApi.chopper(this.chopper);
+
   ClockifyApi({
     String? apiKey,
     String? marketplaceKey,
     String? url,
     List<Interceptor> interceptors = const [],
-  })  : _apiKey = apiKey,
-        _marketplaceKey = marketplaceKey,
-        chopper = ChopperClient(
+  }) : chopper = ChopperClient(
           baseUrl: Uri.parse(url ?? ClockifyApi.url),
           services: [
-            // Create and pass an instance of the generated service to the client
             ClockifyApiUsersService.create(),
-            ClockifyApiWorkspacesService.create()
+            ClockifyApiWorkspacesService.create(),
           ],
-          // converter: JsonConverter(),
           converter: _JsonTypeConverter({
             User: (json) => User.fromJson(json),
             Workspace: (json) => Workspace.fromJson(json),
@@ -54,20 +44,29 @@ class ClockifyApi {
               ],
         );
 
-  ///
-  /// Chopper services
-  ///
   ServiceType _service<ServiceType extends ChopperService>() =>
       chopper.getService<ServiceType>();
 
-  ClockifyApiWorkspacesService get workspaces =>
+  ClockifyApiWorkspacesService get _workspacesService =>
       _service<ClockifyApiWorkspacesService>();
 
-  ClockifyApiUsersService get users => _service<ClockifyApiUsersService>();
+  ClockifyApiUsersService get _usersService =>
+      _service<ClockifyApiUsersService>();
+
+  // Top-level API
+
+  WorkspacesRef get workspaces => WorkspacesRef(_workspacesService);
+
+  WorkspaceRef workspace(String workspaceId) =>
+      WorkspaceRef(_workspacesService, workspaceId);
+
+  UsersRef get users => UsersRef(_usersService);
 }
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
+//
+//
 class _JsonTypeConverter extends JsonConverter {
   final Map<Type, FromJson> _factories;
 
@@ -77,7 +76,6 @@ class _JsonTypeConverter extends JsonConverter {
   FutureOr<Response<BodyType>> convertResponse<BodyType, InnerType>(
       Response response) {
     try {
-      // final jsonMap = json.decode(response.bodyString);
       final jsonMap = json.decode(utf8.decode(response.bodyBytes));
 
       if (jsonMap is Map<String, dynamic>) {
